@@ -1,33 +1,41 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-
+import Input from './components/Input'
+import { fetchWeatherForCity } from './api/weather.api';
 function App() {
-  const [count, setCount] = useState(0)
+
+
+  const [city, setCity] = useState('');
+  const [weather, setWeather] = useState(null);
+
+
+  const handleSearch = async () => {
+    try {
+
+      const weatherData = await fetchWeatherForCity(city);
+      setWeather(weatherData);
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div>
+      <Input 
+      type="text"
+      value={city}
+      onChange={(e) => setCity(e.target.value)}
+      placeholder="Enter city name"
+      />
+      <button onClick={handleSearch}>Search City</button>
+      {weather && (
+        <div>
+          <p>Temperature: {weather.current_weather.temperature}°C</p>
+        </div>
+      )}
+    </div>
     </>
   )
 }
