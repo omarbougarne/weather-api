@@ -10,15 +10,21 @@ function App() {
 
 
   const handleSearch = async () => {
-    try {
-
-      const weatherData = await fetchWeatherForCity(city);
-      setWeather(weatherData);
-
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  console.log('Searching for:', city); 
+  
+  if (!city.trim()) {
+    alert('Please enter a city name');
+    return;
   }
+  
+  try {
+    const weatherData = await fetchWeatherForCity(city);
+    console.log('Final weather data:', weatherData);
+    setWeather(weatherData);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
 
   return (
     <>
